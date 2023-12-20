@@ -1,14 +1,26 @@
 import React, { FC } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import { PostImage as PostMierda } from "../../types";
+import { PostImage as PostMierda, RootStackParams } from "../../types";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
-const PostImage: FC<PostMierda> = ({ title, date }) => {
+type PostImageNavigationProps = NativeStackNavigationProp<
+  RootStackParams,
+  "Detail"
+>;
+
+const PostImage: FC<PostMierda> = ({ title, date, url, explanation }) => {
+  const { navigate } = useNavigation<PostImageNavigationProps>();
+  const handleViewPress = () => {
+    navigate("Detail", { title, date, url, explanation });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.date}>{date}</Text>
       <View style={styles.buttonContainer}>
-        <Button title="View" />
+        <Button title="View" onPress={handleViewPress} />
       </View>
     </View>
   );
@@ -21,7 +33,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 16,
   },
-  title: {
+  title: { 
     color: "#fff",
     fontWeight: "bold",
     fontSize: 18,
